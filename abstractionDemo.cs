@@ -1,3 +1,6 @@
+//Abstract class: is a restricted class that cannot be used to create objects (to access it, it must be inherited from another class).
+//Abstract method: can only be used in an abstract class, and it does not have a body. The body is provided by the derived class (inherited from).
+
 using System;
 namespace GarbageCollectionDemo
 {
@@ -6,7 +9,7 @@ namespace GarbageCollectionDemo
         static void Main(string[] args)
         {
             Console.WriteLine("Transaction doing First Bank");
-            First first = new First();
+            IBank first = BankFactory.GetBankObject("First");
             first.ValidateCard();
             first.WithdrawMoney();
             first.CheckBalanace();
@@ -14,7 +17,7 @@ namespace GarbageCollectionDemo
             first.MiniStatement();
 
             Console.WriteLine("\nTransaction doing Hera Bank");
-            Hera hera = new Hera();
+            IBank hera = BankFactory.GetBankObject("Hera");
             hera.ValidateCard();
             hera.WithdrawMoney();
             hera.CheckBalanace();
@@ -24,8 +27,34 @@ namespace GarbageCollectionDemo
             Console.Read();
         }
     }
-    
-    public class First
+
+    public interface IBank
+    {
+        void ValidateCard();
+        void WithdrawMoney();
+        void CheckBalanace();
+        void BankTransfer();
+        void MiniStatement();
+    }
+
+    public class BankFactory
+    {
+        public static IBank GetBankObject(string bankType)
+        {
+            IBank BankObject = null;
+            if (bankType == "First")
+            {
+                BankObject = new first();
+            }
+            else if (bankType == "Hera")
+            {
+                BankObject = new hera();
+            }
+            return BankObject;
+        }
+    }
+
+    public class First : IBank
     {
         public void BankTransfer()
         {
@@ -53,7 +82,7 @@ namespace GarbageCollectionDemo
         }
     }
 
-    public class Hera
+    public class Hera : IBank
     {
         public void BankTransfer()
         {
